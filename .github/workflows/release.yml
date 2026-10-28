@@ -20,7 +20,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # claude.ai rejects an upload whose name or description breaks these rules,
       # so check them here instead of finding out after the release is out.
