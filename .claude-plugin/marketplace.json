@@ -1,0 +1,14 @@
+{
+  "name": "ask-first",
+  "description": "Ask First skill for Claude: the AI asks before it acts.",
+  "owner": {
+    "name": "RosBradley"
+  },
+  "plugins": [
+    {
+      "name": "ask-first",
+      "source": "./",
+      "description": "Have the AI ask you questions before it starts a task: one question at a time, a few answers with its recommendation first, and a free-form answer last."
+    }
+  ]
+}

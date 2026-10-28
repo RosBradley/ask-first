@@ -1,0 +1,84 @@
+# Publishes a GitHub release with ask-first.zip (claude.ai's upload) and SKILL.md
+# (Gemini's and ChatGPT's upload).
+# Runs when the version in .claude-plugin/plugin.json changes on main, and skips a
+# version that already has a release. To run it by hand: Actions tab, Release,
+# "Run workflow".
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .claude-plugin/plugin.json
+      - .github/workflows/release.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # claude.ai rejects an upload whose name or description breaks these rules,
+      # so check them here instead of finding out after the release is out.
+      - name: Check SKILL.md against claude.ai's upload rules
+        run: |
+          skill=skills/ask-first/SKILL.md
+          name="$(sed -n 's/^name: *//p' "$skill" | head -n 1)"
+          description="$(sed -n 's/^description: *"\(.*\)"$/\1/p' "$skill" | head -n 1)"
+          fail() { echo "::error file=$skill::$1"; exit 1; }
+          [ -n "$description" ] || fail "No quoted description found in the frontmatter."
+          case "$description" in *'<'* | *'>'*) fail "The description has < or >, which claude.ai rejects." ;; esac
+          [ "${#description}" -le 1024 ] || fail "The description is ${#description} characters; claude.ai allows 1024."
+          echo "$name" | grep -Eq '^[a-z0-9-]{1,64}$' || fail "The name must be 1 to 64 lowercase letters, digits or hyphens."
+          case "$name" in *anthropic* | *claude*) fail "The name can't contain anthropic or claude." ;; esac
+          version="$(jq -r .version .claude-plugin/plugin.json)"
+          grep -qx "Version: $version" "$skill" || fail "SKILL.md's Version line doesn't say $version, the version in plugin.json."
+          echo "SKILL.md passes: name $name, version $version, description ${#description} characters."
+
+      # ChatGPT's custom instructions hold 1,500 characters on the Free and Go plans.
+      - name: Check the paste-in prompt fits ChatGPT's smallest limit
+        run: |
+          n=$(wc -m < prompts/ask-first.txt)
+          [ "$n" -le 1500 ] || { echo "::error file=prompts/ask-first.txt::$n characters; ChatGPT's Free plan allows 1500."; exit 1; }
+          echo "prompts/ask-first.txt is $n characters."
+
+      - name: Read the version
+        id: version
+        run: echo "tag=v$(jq -r .version .claude-plugin/plugin.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Skip a version that's already released
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "$TAG is already released."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build ask-first.zip
+        if: steps.check.outputs.skip != 'true'
+        run: cd skills && zip -r -X ../ask-first.zip ask-first
+
+      - name: Publish the release
+        if: steps.check.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          {
+            echo "**claude.ai:** download \`ask-first.zip\` below, then upload it and turn it on under **Customize > Skills**."
+            echo
+            echo "**Gemini and ChatGPT Skills:** download \`SKILL.md\` below and upload it; see the [README](https://github.com/${GITHUB_REPOSITORY}#install)."
+            echo
+            echo "**Claude Code:** install it as a plugin; see the [README](https://github.com/${GITHUB_REPOSITORY}#claude-code)."
+            echo
+            echo "## What's new"
+            awk -v h="## ${TAG#v}" 'index($0, h " ") == 1 || $0 == h {f=1; next} f && /^## / {exit} f' CHANGELOG.md
+          } > notes.md
+          gh release create "$TAG" ask-first.zip skills/ask-first/SKILL.md --target "$GITHUB_SHA" --title "Ask First ${TAG#v}" --notes-file notes.md

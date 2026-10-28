@@ -1,0 +1,15 @@
+{
+  "name": "ask-first",
+  "description": "Have the AI ask you questions before it starts a task: one question at a time, a few answers with its recommendation first, and a free-form answer last.",
+  "version": "0.1.0",
+  "author": {
+    "name": "RosBradley"
+  },
+  "license": "MIT",
+  "keywords": [
+    "interview",
+    "questions",
+    "requirements",
+    "skill"
+  ]
+}

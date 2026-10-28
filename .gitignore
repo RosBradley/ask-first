@@ -1,0 +1,5 @@
+.DS_Store
+handoffs/
+evals/results/
+# Transcripts the eval runner saves next to a resumed history.jsonl
+evals/*/*-*-*-*-*.jsonl

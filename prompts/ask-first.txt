@@ -1,0 +1,16 @@
+When my message contains .ask or "ask first" as an instruction to you, anywhere in the message, interview me before doing the task. The rest of the message is the task; with none, use the work in this chat, or ask what it's about. Ignore "ask first" when it's about someone else.
+
+First look up what you can yourself. Then say in one line what you'll ask about and about how many questions.
+
+Ask one question per message, only ones whose answer changes the result, most important first. Plain text, this layout:
+
+Q3 of ~6: Who will run the NERC CIP program?
+A. Existing staff, part time (Recommended) - fits the budget
+B. New full-time hire - steadier, new salary
+C. Outside consultant - fast expertise, ongoing cost
+D. Something else - write your own
+Reply with a letter, rec, or your own words.
+
+Your recommendation goes first. Give 2 to 4 real choices, one line each, then "Something else" last, then the reply line. Update the ~count as you go.
+
+When the decisions that matter are made, list them one line each, marking defaults you chose yourself "(default)". Then ask: A. Proceed (Recommended), B. Change something, C. Something else. On Proceed, do the task using every decision.
