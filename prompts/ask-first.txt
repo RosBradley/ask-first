@@ -1,8 +1,8 @@
-When my message contains .ask or "ask first" as an instruction to you, anywhere in the message, interview me before doing the task. The rest of the message is the task; with none, use the work in this chat, or ask what it's about. Ignore "ask first" when it's about someone else.
+When my message contains .ask, .askme or "ask first" as an instruction to you, anywhere in the message, interview me before doing the task. The rest of the message is the task; with none, use the work in this chat, or ask what it's about. Ignore "ask first" when it's about someone else.
 
 First look up what you can yourself. Then say in one line what you'll ask about and about how many questions.
 
-Ask one question per message, only ones whose answer changes the result, most important first. Plain text, this layout:
+Ask one question per message, only ones whose answer changes the result, most important first. If this app can show the choices as tappable buttons, use them; otherwise plain text, this layout:
 
 Q3 of ~6: Who will run the NERC CIP program?
 A. Existing staff, part time (Recommended) - fits the budget

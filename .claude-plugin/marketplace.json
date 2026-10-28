@@ -2,7 +2,7 @@
   "name": "ask-first",
   "description": "Ask First skill for Claude: the AI asks before it acts.",
   "owner": {
-    "name": "RosBradley"
+    "name": "RossBradley"
   },
   "plugins": [
     {

@@ -32,19 +32,19 @@ You:  a
 3. **Its recommendation comes first.** Answer with a letter, `rec` for the recommendation, or your own words.
 4. **It recaps before it starts.** When the decisions that matter are made, the AI lists them, one line each, including any defaults it chose without asking. You confirm or change them, and only then does it do the task.
 
-In Claude Code, the questions come as clickable choices, and the AI can group 2 to 4 questions that don't depend on each other into one step.
+Where the app can show them, the questions come as clickable choices: in Claude Code, claude.ai and (new in October 2026) ChatGPT. Elsewhere they come as the text above. In Claude Code, the AI can also group 2 to 4 questions that don't depend on each other into one step.
 
-**Status:** v0.1.0, in testing.
+**Status:** v0.1.1, in testing.
 
 ## Commands
 
 | Plain words | Dot style | What happens |
 |---|---|---|
-| `ask first` | `.ask` | Interviews you about the task in the same message, or about the work already in the chat if there is none |
+| `ask first` | `.ask` or `.askme` | Interviews you about the task in the same message, or about the work already in the chat if there is none |
 
-- Put it anywhere in the message: `ask first: write a launch plan`, `Write a launch plan. .ask`, or `.ask` alone.
+- Put it anywhere in the message: `ask first: write a launch plan`, `Write a launch plan. .askme`, or `.ask` alone.
 - Any case works, so `.Ask` from a phone counts.
-- `.ask` needs the dot. "ask" alone is an ordinary word.
+- `.ask` and `.askme` need the dot. "ask" alone is an ordinary word.
 - "Ask first" about someone else doesn't trigger it: "write a rule for new hires: ask first before deleting files" just gets you the rule.
 
 ## Install
@@ -79,7 +79,7 @@ On Claude Code older than 2.1.275, use two steps instead:
 /plugin install ask-first@ask-first
 ```
 
-Then type `.ask` (or `ask first`) in any message, or run it directly with `/ask-first:ask-first`.
+Then type `.ask`, `.askme` or `ask first` in any message, or run it directly with `/ask-first:ask-first`.
 
 To install without the plugin system, copy `skills/ask-first/` to `~/.claude/skills/ask-first/` (all your projects) or `.claude/skills/ask-first/` (one repository).
 
@@ -96,10 +96,11 @@ zip -r ask-first.zip ask-first/
 
 ## Tests
 
-[evals/](evals/) holds 4 test cases for `claude plugin eval`. Each one starts a fresh Claude Code session with the skill loaded, types one message, and checks what happens:
+[evals/](evals/) holds 5 test cases for `claude plugin eval`. Each one starts a fresh Claude Code session with the skill loaded, types one message, and checks what happens:
 - `.ask` at the end of a task starts an interview.
 - `ask first` at the start of a message starts an interview.
 - `.ask` alone in a new chat asks what the interview is about.
+- `.askme` at the end of a task starts an interview.
 - "Ask first" in a rule for someone else does not trigger the skill.
 
 To run them from the repo folder:
@@ -114,7 +115,7 @@ The other AIs have no test runner, so [docs/setup.md](docs/setup.md) has a short
 
 ## Limits
 
-- Outside Claude Code, the questions are plain text, not buttons. You answer by typing a letter.
+- Clickable choices depend on the app. Claude Code and claude.ai show them, and ChatGPT can with its Intelligent UI (paid plans first). Gemini, Microsoft 365 Copilot and Meta AI show plain text, and you answer by typing a letter. See [docs/setup.md](docs/setup.md#clickable-choices-or-text) for each app.
 - The AI decides which questions matter and how many to ask. The count (`Q3 of ~6`) is an estimate, and it can change as you answer.
 - The short version (ChatGPT, Copilot, Meta AI) has less guidance than the full skill, so its questions may be less well chosen.
 - Meta AI has no custom-instructions feature, only memory, so it may not always follow the instructions.

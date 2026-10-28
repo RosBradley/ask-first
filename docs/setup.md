@@ -1,11 +1,29 @@
 # Setting up Ask First in each AI
 
-The command is the same everywhere: type `.ask` (or `ask first`) anywhere in a message. What changes from app to app is how you install it, and whether you get the full skill or the short version.
+The command is the same everywhere: type `.ask`, `.askme` or `ask first` anywhere in a message. What changes from app to app is how you install it, and whether you get the full skill or the short version.
 
 - **The full skill** is [skills/ask-first/SKILL.md](../skills/ask-first/SKILL.md). Claude, Gemini, ChatGPT (on some plans) and GitHub Copilot all load skills in this same `SKILL.md` format.
 - **The short version** is [prompts/ask-first.txt](../prompts/ask-first.txt), about 1,200 characters, for apps that only take pasted instructions. It asks the same way, with less guidance on picking good questions.
 
 Everything below was checked against each company's help pages on October 27, 2026. Steps marked *(unconfirmed)* come from secondary sources, or from pages that couldn't be read directly. If a step doesn't match what you see, please [open an issue](https://github.com/RosBradley/ask-first/issues).
+
+## Clickable choices or text
+
+Ask First tells the AI to show its questions as clickable choices when the app can, and as lettered text when it can't. Either way, the questions and answers are the same. As of October 27, 2026:
+
+| App | Questions come as |
+|---|---|
+| Claude Code | Clickable choices (the AskUserQuestion tool) |
+| claude.ai (web, desktop, mobile) | Clickable choices, when Claude uses its interactive options |
+| ChatGPT | Tappable buttons when its Intelligent UI is on (GPT-6, paid plans first); otherwise text |
+| GitHub Copilot (VS Code) | *(unconfirmed)* Clickable, through VS Code's askQuestions tool; otherwise text |
+| Gemini | Text. Its interactive features don't cover questions yet |
+| Microsoft 365 Copilot | Text |
+| Meta AI | Text |
+
+The app, not Ask First, decides whether buttons appear. ChatGPT, for example, chooses when to use Intelligent UI.
+
+Sources: [Claude's interactive options](https://support.claude.com/en/articles/13641943-visual-and-interactive-content), [Intelligent UI in ChatGPT](https://help.openai.com/en/articles/20001598-intelligent-ui-in-chatgpt), [VS Code askQuestions](https://github.com/github/spec-kit/issues/1657).
 
 ## Claude
 
@@ -45,6 +63,8 @@ Sources: [Gemini Skills](https://support.google.com/gemini/answer/17094296), [Ge
 The box holds 1,500 characters on the Free and Go plans and 5,000 on paid plans. The short version is about 1,200 characters, so it fits both. On Free, though, it leaves little room for your own instructions.
 
 To use it in one Project only, paste it into that Project's instructions instead.
+
+With Intelligent UI, ChatGPT may show the questions as tappable buttons. If you set **Personalization > Layout and Visuals** to **Simple**, expect text instead.
 
 ### Skills (Business, Enterprise and Edu)
 
@@ -101,7 +121,7 @@ For the AIs without automated tests, run these four messages in new chats after 
 
 | Type | Expected |
 |---|---|
-| `Plan a weekend trip to Chicago. .ask` | One line saying what it will ask about, then `Q1 of ~N` with lettered answers, the first marked (Recommended) and the last "Something else - write your own" |
+| `Plan a weekend trip to Chicago. .ask` | One line saying what it will ask about, then `Q1 of ~N` with lettered answers or clickable choices, the first marked (Recommended) and the last "Something else - write your own" |
 | `.ask` | A first question asking what the interview is about |
 | `Write a rule for new hires: ask first before deleting files` | The rule, with no interview |
 | Answer `rec` to every question in the first test | A numbered list of decisions, then Proceed / Change something; on Proceed, the plan itself |

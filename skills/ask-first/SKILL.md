@@ -1,11 +1,17 @@
 ---
 name: ask-first
-description: "Asks the user questions before starting a task: one question at a time, each with a few answers (the AI's recommendation first and labeled) and a free-form answer last, then a summary of the decisions to confirm before the work begins. Use when the user's message contains the command .ask or the words ask first used as an instruction to the AI, anywhere in the message, in any case: at the start (ask first: plan our launch), at the end (plan our launch. .ask) or alone (.ask, about the work already in this chat). Also when the user plainly asks the AI to interview them or ask them questions before starting. Not when ask first is about someone else, such as a rule for a colleague (new hires should ask first before deleting files)."
+description: "Asks the user questions before starting a task: one question at a time, each with a few answers (the AI's recommendation first and labeled) and a free-form answer last, then a summary of the decisions to confirm before the work begins. Use when the user's message contains the command .ask or .askme or the words ask first used as an instruction to the AI, anywhere in the message, in any case: at the start (ask first: plan our launch), at the end (plan our launch. .ask) or alone (.ask, about the work already in this chat). Also when the user plainly asks the AI to interview them or ask them questions before starting. Not when ask first is about someone else, such as a rule for a colleague (new hires should ask first before deleting files)."
+license: MIT
+metadata:
+  author: RossBradley
+  repository: https://github.com/RosBradley/ask-first
 ---
 
 # Ask First
 
-Version: 0.1.0
+Version: 0.1.1
+
+Author: RossBradley · https://github.com/RosBradley/ask-first
 
 A short request leaves a lot unsaid, and the user often hasn't had time to think through what matters. This skill turns that around: before doing the task, ask the questions that would change the result, one at a time, each with a few ready answers to pick from. Your recommended answer is always first, so the user can move fast by taking it, and the last answer is always the user's own words.
 
@@ -13,11 +19,11 @@ A short request leaves a lot unsaid, and the user often hasn't had time to think
 
 | Plain words | Dot style | What happens |
 |---|---|---|
-| `ask first` | `.ask` | Starts an interview about the task in the same message, or about the work already in this chat if there is none |
+| `ask first` | `.ask` or `.askme` | Starts an interview about the task in the same message, or about the work already in this chat if there is none |
 
-- The command can be anywhere in the message: `ask first: write a launch plan`, `Write a launch plan. .ask`, or `.ask` alone. Case doesn't matter, so `.Ask` and `Ask first` count.
+- The command can be anywhere in the message: `ask first: write a launch plan`, `Write a launch plan. .askme`, or `.ask` alone. Case doesn't matter, so `.Ask`, `.AskMe` and `Ask first` count.
 - Everything else in the message is the task. Leave the command words out of it.
-- `.ask` always carries the dot. `ask` alone is an ordinary word.
+- `.ask` and `.askme` always carry the dot. `ask` alone is an ordinary word.
 - `ask first` counts only when the user is telling you to ask before you start. "Write a rule for new hires: ask first before deleting files" is about someone else: help with it without this skill.
 
 ## Before the first question
@@ -38,15 +44,15 @@ Ask one question per message, so each answer can shape the next question. Each q
 
 Answers are real alternatives, not one good choice with filler around it. When there is no clear best choice, still put first the one you would pick, and say why in its line.
 
-### In Claude Code (the AskUserQuestion tool is available)
+### When the app can show clickable choices
 
-Use the AskUserQuestion tool. Put the recommended answer first with ` (Recommended)` at the end of its label. The tool adds the free-form answer (Other) on its own, so don't add one. Put the `Q3 of ~6` count in the header or the question.
+If this app gives you a way to show a question as choices the user can click or tap (a question tool such as AskUserQuestion in Claude Code, or the interactive options in claude.ai or ChatGPT), use it. Put the recommended answer first, with ` (Recommended)` at the end of its label, and keep the `Q3 of ~6` count in the question or its header. If the app adds its own free-form answer (such as Other), don't add another; if it doesn't, make the last choice `Something else - write your own`.
 
-Batch option: when the next 2 to 4 questions don't depend on each other's answers, ask them in one call. Ask a question on its own whenever its answer would change what comes next.
+Batch option: when the app's question tool can ask several questions in one step and the next 2 to 4 don't depend on each other's answers, ask them together. Ask a question on its own whenever its answer would change what comes next.
 
-### Everywhere else (text)
+### Otherwise (text)
 
-Write the question as plain text, in this layout, with no bold or other formatting, so it reads the same in every app:
+When the app can't show clickable choices, or you aren't sure it can, write the question as plain text, in this layout, with no bold or other formatting, so it reads the same in every app:
 
 ```text
 Q3 of ~6: Who will run the NERC CIP program day to day?
