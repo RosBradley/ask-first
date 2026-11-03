@@ -3,7 +3,7 @@
 The command is the same almost everywhere: type `.ask`, `.askme` or `ask first` anywhere in a message. On Gemini, start it with `@ask-first` instead. What changes from app to app is how you install it, and whether you get the full skill or the short version.
 
 - **The full skill** is [skills/ask-first/SKILL.md](../skills/ask-first/SKILL.md). Claude, Gemini and GitHub Copilot load it as a skill, and ChatGPT loads it as a plugin.
-- **The short version** is [prompts/ask-first.txt](../prompts/ask-first.txt), about 1,400 characters, for apps that only take pasted instructions. It asks the same way, with less guidance on picking good questions.
+- **The short version** is [prompts/ask-first.txt](../prompts/ask-first.txt), about 1,400 characters, for apps that only take pasted instructions. Each release also has it as `ask-first-for-other-ais.txt`. It asks the same way, with less guidance on picking good questions.
 
 Everything below was checked against each company's help pages on October 27, 2026. Steps marked *(unconfirmed)* come from secondary sources, or from pages that couldn't be read directly. If a step doesn't match what you see, please [open an issue](https://github.com/RosBradley/ask-first/issues).
 

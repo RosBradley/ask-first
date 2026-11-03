@@ -1,5 +1,6 @@
 # Publishes a GitHub release with ask-first-for-claude.zip (claude.ai's upload),
-# ask-first-for-chatgpt.zip (ChatGPT's upload) and SKILL.md (Gemini's upload).
+# ask-first-for-chatgpt.zip (ChatGPT's upload), SKILL.md (Gemini's upload) and
+# ask-first-for-other-ais.txt (the short version, to paste into other AIs).
 # Runs when the version in .claude-plugin/plugin.json changes on main, and skips a
 # version that already has a release. To run it by hand: Actions tab, Release,
 # "Run workflow".
@@ -70,6 +71,10 @@ jobs:
         if: steps.check.outputs.skip != 'true'
         run: zip -r -X ask-first-for-chatgpt.zip .claude-plugin/plugin.json skills
 
+      - name: Copy the short version for other AIs
+        if: steps.check.outputs.skip != 'true'
+        run: cp prompts/ask-first.txt ask-first-for-other-ais.txt
+
       - name: Publish the release
         if: steps.check.outputs.skip != 'true'
         env:
@@ -83,9 +88,11 @@ jobs:
             echo
             echo "**Gemini:** download \`SKILL.md\` below, upload it under **Customize > Skills**, then start it with \`@ask-first\`."
             echo
+            echo "**Microsoft 365 Copilot, Meta AI and other AIs:** download \`ask-first-for-other-ais.txt\` below and paste it into the AI's custom instructions or memory, or as the first message of a chat; see the [setup guide](https://github.com/${GITHUB_REPOSITORY}/blob/main/docs/setup.md)."
+            echo
             echo "**Claude Code:** install it as a plugin; see the [README](https://github.com/${GITHUB_REPOSITORY}#claude-code)."
             echo
             echo "## What's new"
             awk -v h="## ${TAG#v}" 'index($0, h " ") == 1 || $0 == h {f=1; next} f && /^## / {exit} f' CHANGELOG.md
           } > notes.md
-          gh release create "$TAG" ask-first-for-claude.zip ask-first-for-chatgpt.zip skills/ask-first/SKILL.md --target "$GITHUB_SHA" --title "Ask First ${TAG#v}" --notes-file notes.md
+          gh release create "$TAG" ask-first-for-claude.zip ask-first-for-chatgpt.zip skills/ask-first/SKILL.md ask-first-for-other-ais.txt --target "$GITHUB_SHA" --title "Ask First ${TAG#v}" --notes-file notes.md
