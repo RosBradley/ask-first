@@ -1,6 +1,8 @@
 # Publishes a GitHub release with ask-first-for-claude.zip (claude.ai's upload),
-# ask-first-for-chatgpt.zip (ChatGPT's upload), SKILL.md (Gemini's upload) and
-# ask-first-for-other-ais.txt (the short version, to paste into other AIs).
+# ask-first-for-chatgpt.zip (ChatGPT's upload), ask-first-for-gemini.zip (Gemini's
+# upload) and ask-first-for-other-ais.txt (the short version, to paste into other AIs).
+# Every file is named for its app, and so is the folder it unzips into on a Mac, so
+# someone who downloads several can tell them apart.
 # Runs when .claude-plugin/plugin.json or this file changes on main. A new version
 # gets a new release. A version that's already released gets its files and notes
 # rebuilt from main and replaced, and files no longer built are removed; its tag
@@ -53,8 +55,19 @@ jobs:
         id: version
         run: echo "tag=v$(jq -r .version .claude-plugin/plugin.json)" >> "$GITHUB_OUTPUT"
 
+      # claude.ai wants the skill's folder at the top of the zip. Naming that folder
+      # ask-first-for-claude makes the zip unzip into a folder named for its app; the
+      # skill's ID inside stays ask-first. (Chat Handoff ships the same way, and claude.ai
+      # accepted it on November 3, 2026.)
       - name: Build ask-first-for-claude.zip
-        run: cd skills && zip -r -X ../ask-first-for-claude.zip ask-first
+        run: |
+          mkdir -p build && cp -R skills/ask-first build/ask-first-for-claude
+          (cd build && zip -r -X "$GITHUB_WORKSPACE/ask-first-for-claude.zip" ask-first-for-claude)
+
+      # Gemini needs the file named exactly SKILL.md, so it ships inside a zip named for
+      # Gemini, at the top. Unzipped on a Mac, it lands in a folder named ask-first-for-gemini.
+      - name: Build ask-first-for-gemini.zip
+        run: cd skills/ask-first && zip -X "$GITHUB_WORKSPACE/ask-first-for-gemini.zip" SKILL.md
 
       # ChatGPT's plugin upload wants a manifest and skills/<name>/SKILL.md at the top.
       - name: Build ask-first-for-chatgpt.zip
@@ -72,7 +85,7 @@ jobs:
             echo
             echo "**ChatGPT:** download \`ask-first-for-chatgpt.zip\` below and upload the zip as it is under **Customize > Plugins**, then start it with \`@ask-first\`. On a Mac, the zip holds a hidden \`.claude-plugin\` folder (the plugin's manifest) next to \`skills\`, so Finder shows only the skill; don't unzip it and zip it again. If Safari unzips it for you, download it again with right-click > **Download Linked File**, or with another browser."
             echo
-            echo "**Gemini:** download \`SKILL.md\` below, upload it under **Customize > Skills**, then start it with \`@ask-first\`."
+            echo "**Gemini:** download \`ask-first-for-gemini.zip\` below and upload it under **Customize > Skills**, then start it with \`@ask-first\`. If your browser unzipped it into a folder named \`ask-first-for-gemini\`, upload the \`SKILL.md\` inside that folder instead."
             echo
             echo "**Microsoft 365 Copilot, Meta AI and other AIs:** download \`ask-first-for-other-ais.txt\` below and paste it into the AI's custom instructions or memory, or as the first message of a chat; see the [setup guide](https://github.com/${GITHUB_REPOSITORY}/blob/main/docs/setup.md)."
             echo
@@ -87,7 +100,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}
         run: |
-          files=(ask-first-for-claude.zip ask-first-for-chatgpt.zip skills/ask-first/SKILL.md ask-first-for-other-ais.txt)
+          files=(ask-first-for-claude.zip ask-first-for-chatgpt.zip ask-first-for-gemini.zip ask-first-for-other-ais.txt)
           if ! gh release view "$TAG" >/dev/null 2>&1; then
             gh release create "$TAG" "${files[@]}" --target "$GITHUB_SHA" --title "Ask First ${TAG#v}" --notes-file notes.md
             exit 0

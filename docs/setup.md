@@ -43,8 +43,8 @@ See [Claude Code in the README](../README.md#claude-code). In Claude Code, the q
 
 Gemini's Skills take the same `SKILL.md` file. Skills replace Gems: for personal accounts, Gems become read-only on November 17, 2026, so don't build this as a Gem.
 
-1. Download [SKILL.md](https://github.com/RosBradley/ask-first/releases/latest/download/SKILL.md) from the latest release. Don't upload `ask-first-for-claude.zip`: Gemini expects `SKILL.md` at the top of a zip, and that zip has it inside a folder.
-2. At [gemini.google.com](https://gemini.google.com), open **Customize** in the sidebar (under **More** if it's hidden), then **Skills > Create > Upload**, and choose `SKILL.md`.
+1. Download [ask-first-for-gemini.zip](https://github.com/RosBradley/ask-first/releases/latest/download/ask-first-for-gemini.zip) from the latest release. It holds `SKILL.md` at the top, the way Gemini expects. Don't upload `ask-first-for-claude.zip`, which has it inside a folder.
+2. At [gemini.google.com](https://gemini.google.com), open **Customize** in the sidebar (under **More** if it's hidden), then **Skills > Create > Upload**, and choose `ask-first-for-gemini.zip`. If your browser unzipped it into a folder named `ask-first-for-gemini` (Safari does this), choose the `SKILL.md` inside that folder instead.
 3. In a new chat, type: `@ask-first Plan a weekend trip to Chicago`
 
 Start it with `@ask-first` each time. Gemini decides for itself whether a message matches a skill, and in testing on November 1, 2026, it often ignored `.ask`, `.askme` and `ask first`. If Gemini asks to connect Google Workspace, you don't need to: Ask First works without it.

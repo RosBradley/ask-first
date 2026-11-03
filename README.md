@@ -55,7 +55,7 @@ Pick your AI. Step-by-step instructions, with what each app can and can't do, ar
 |---|---|---|
 | **Claude** (claude.ai, desktop, mobile) | Upload [ask-first-for-claude.zip](https://github.com/RosBradley/ask-first/releases/latest/download/ask-first-for-claude.zip) under **Customize > Skills** | The full skill |
 | **Claude Code** | Install the plugin (below) | The full skill, with clickable choices |
-| **Gemini** | Upload [SKILL.md](https://github.com/RosBradley/ask-first/releases/latest/download/SKILL.md) under **Customize > Skills** | The full skill. Start it with `@ask-first`, not `.ask` |
+| **Gemini** | Upload [ask-first-for-gemini.zip](https://github.com/RosBradley/ask-first/releases/latest/download/ask-first-for-gemini.zip) under **Customize > Skills** | The full skill. Start it with `@ask-first`, not `.ask` |
 | **ChatGPT** | Upload [ask-first-for-chatgpt.zip](https://github.com/RosBradley/ask-first/releases/latest/download/ask-first-for-chatgpt.zip) under **Customize > Plugins** | The full skill, with clickable choices. Start it with `@ask-first` |
 | **Microsoft 365 Copilot** | Paste [the short version](prompts/ask-first.txt) into **Custom instructions** | The short version, in every chat |
 | **GitHub Copilot** | Copy `skills/ask-first/` into `~/.copilot/skills/` | The full skill |
@@ -87,11 +87,11 @@ To install without the plugin system, copy `skills/ask-first/` to `~/.claude/ski
 
 ### Building the files yourself
 
-To build claude.ai's zip from source (for a version not yet released), zip the skill folder itself, so the archive's top level is `ask-first/`:
+To build claude.ai's zip from source (for a version not yet released), copy the skill folder under the name `ask-first-for-claude` and zip that folder, so the archive's top level is `ask-first-for-claude/`:
 
 ```bash
-cd skills
-zip -r ask-first-for-claude.zip ask-first/
+mkdir -p build && cp -R skills/ask-first build/ask-first-for-claude
+cd build && zip -r ../ask-first-for-claude.zip ask-first-for-claude
 ```
 
 ## Tests
