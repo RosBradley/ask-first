@@ -29,7 +29,7 @@ Sources: [Claude's interactive options](https://support.claude.com/en/articles/1
 
 ### claude.ai (web, desktop app and mobile)
 
-1. Download [ask-first.zip](https://github.com/RosBradley/ask-first/releases/latest/download/ask-first.zip) from the [latest release](https://github.com/RosBradley/ask-first/releases/latest). Keep it zipped.
+1. Download [ask-first-for-claude.zip](https://github.com/RosBradley/ask-first/releases/latest/download/ask-first-for-claude.zip) from the [latest release](https://github.com/RosBradley/ask-first/releases/latest). Keep it zipped.
 2. Upload it and turn it on under **Customize > Skills**.
 3. In a new chat, type: `Plan a weekend trip to Chicago. .ask`
 
@@ -43,7 +43,7 @@ See [Claude Code in the README](../README.md#claude-code). In Claude Code, the q
 
 Gemini's Skills take the same `SKILL.md` file. Skills replace Gems: for personal accounts, Gems become read-only on November 17, 2026, so don't build this as a Gem.
 
-1. Download [SKILL.md](https://github.com/RosBradley/ask-first/releases/latest/download/SKILL.md) from the latest release. Don't upload `ask-first.zip`: Gemini expects `SKILL.md` at the top of a zip, and that zip has it inside a folder.
+1. Download [SKILL.md](https://github.com/RosBradley/ask-first/releases/latest/download/SKILL.md) from the latest release. Don't upload `ask-first-for-claude.zip`: Gemini expects `SKILL.md` at the top of a zip, and that zip has it inside a folder.
 2. At [gemini.google.com](https://gemini.google.com), open **Customize** in the sidebar (under **More** if it's hidden), then **Skills > Create > Upload**, and choose `SKILL.md`.
 3. In a new chat, type: `@ask-first Plan a weekend trip to Chicago`
 
@@ -62,7 +62,7 @@ Sources: [Gemini Skills](https://support.google.com/gemini/answer/17094296), [Ge
 
 Tested on November 3, 2026, in the ChatGPT desktop app for Mac on the Plus plan, in the Chat tab: the questions came as clickable choices all the way to the summary.
 
-1. Download [ask-first-plugin.zip](https://github.com/RosBradley/ask-first/releases/latest/download/ask-first-plugin.zip) from the latest release. Keep it zipped. Don't use `ask-first.zip`, which is for claude.ai.
+1. Download [ask-first-for-chatgpt.zip](https://github.com/RosBradley/ask-first/releases/latest/download/ask-first-for-chatgpt.zip) from the latest release. Keep it zipped. Don't use `ask-first-for-claude.zip`, which is for claude.ai.
 2. In ChatGPT, open **Customize > Plugins**, click **Add**, upload the zip, and click **Add plugin**. Install it if ChatGPT asks.
 3. In a new chat, type: `@ask-first Plan a weekend trip to Chicago`
 

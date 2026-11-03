@@ -1,5 +1,5 @@
-# Publishes a GitHub release with ask-first.zip (claude.ai's upload),
-# ask-first-plugin.zip (ChatGPT's upload) and SKILL.md (Gemini's upload).
+# Publishes a GitHub release with ask-first-for-claude.zip (claude.ai's upload),
+# ask-first-for-chatgpt.zip (ChatGPT's upload) and SKILL.md (Gemini's upload).
 # Runs when the version in .claude-plugin/plugin.json changes on main, and skips a
 # version that already has a release. To run it by hand: Actions tab, Release,
 # "Run workflow".
@@ -61,14 +61,14 @@ jobs:
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Build ask-first.zip
+      - name: Build ask-first-for-claude.zip
         if: steps.check.outputs.skip != 'true'
-        run: cd skills && zip -r -X ../ask-first.zip ask-first
+        run: cd skills && zip -r -X ../ask-first-for-claude.zip ask-first
 
       # ChatGPT's plugin upload wants a manifest and skills/<name>/SKILL.md at the top.
-      - name: Build ask-first-plugin.zip
+      - name: Build ask-first-for-chatgpt.zip
         if: steps.check.outputs.skip != 'true'
-        run: zip -r -X ask-first-plugin.zip .claude-plugin/plugin.json skills
+        run: zip -r -X ask-first-for-chatgpt.zip .claude-plugin/plugin.json skills
 
       - name: Publish the release
         if: steps.check.outputs.skip != 'true'
@@ -77,9 +77,9 @@ jobs:
           TAG: ${{ steps.version.outputs.tag }}
         run: |
           {
-            echo "**claude.ai:** download \`ask-first.zip\` below, then upload it and turn it on under **Customize > Skills**."
+            echo "**claude.ai:** download \`ask-first-for-claude.zip\` below, then upload it and turn it on under **Customize > Skills**."
             echo
-            echo "**ChatGPT:** download \`ask-first-plugin.zip\` below and upload it under **Customize > Plugins**, then start it with \`@ask-first\`."
+            echo "**ChatGPT:** download \`ask-first-for-chatgpt.zip\` below and upload it under **Customize > Plugins**, then start it with \`@ask-first\`."
             echo
             echo "**Gemini:** download \`SKILL.md\` below, upload it under **Customize > Skills**, then start it with \`@ask-first\`."
             echo
@@ -88,4 +88,4 @@ jobs:
             echo "## What's new"
             awk -v h="## ${TAG#v}" 'index($0, h " ") == 1 || $0 == h {f=1; next} f && /^## / {exit} f' CHANGELOG.md
           } > notes.md
-          gh release create "$TAG" ask-first.zip ask-first-plugin.zip skills/ask-first/SKILL.md --target "$GITHUB_SHA" --title "Ask First ${TAG#v}" --notes-file notes.md
+          gh release create "$TAG" ask-first-for-claude.zip ask-first-for-chatgpt.zip skills/ask-first/SKILL.md --target "$GITHUB_SHA" --title "Ask First ${TAG#v}" --notes-file notes.md
