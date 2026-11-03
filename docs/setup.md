@@ -63,8 +63,10 @@ Sources: [Gemini Skills](https://support.google.com/gemini/answer/17094296), [Ge
 Tested on November 3, 2026, in the ChatGPT desktop app for Mac on the Plus plan, in the Chat tab: the questions came as clickable choices all the way to the summary.
 
 1. Download [ask-first-for-chatgpt.zip](https://github.com/RosBradley/ask-first/releases/latest/download/ask-first-for-chatgpt.zip) from the latest release. Keep it zipped. Don't use `ask-first-for-claude.zip`, which is for claude.ai.
-2. In ChatGPT, open **Customize > Plugins**, click **Add**, upload the zip, and click **Add plugin**. Install it if ChatGPT asks.
+2. In ChatGPT, open **Customize > Plugins**, click **Add**, upload the zip as it is, and click **Add plugin**. Install it if ChatGPT asks.
 3. In a new chat, type: `@ask-first Plan a weekend trip to Chicago`
+
+On a Mac, the zip looks like it holds only the skill (`skills/ask-first/SKILL.md`). It also holds the plugin's manifest, `.claude-plugin/plugin.json`, which Finder hides because the folder's name starts with a dot (press Cmd+Shift+. to show it). Upload the zip itself. Don't unzip it and zip it again: Finder's **Compress** puts everything inside an extra folder, and ChatGPT then can't find the manifest. If Safari unzipped the download for you, download it again with right-click > **Download Linked File**, or with another browser.
 
 `@ask-first` picks the plugin directly. In testing, `.ask` alone also started it in the middle of a conversation.
 

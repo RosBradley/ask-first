@@ -1,9 +1,11 @@
 # Publishes a GitHub release with ask-first-for-claude.zip (claude.ai's upload),
 # ask-first-for-chatgpt.zip (ChatGPT's upload), SKILL.md (Gemini's upload) and
 # ask-first-for-other-ais.txt (the short version, to paste into other AIs).
-# Runs when the version in .claude-plugin/plugin.json changes on main, and skips a
-# version that already has a release. To run it by hand: Actions tab, Release,
-# "Run workflow".
+# Runs when .claude-plugin/plugin.json or this file changes on main. A new version
+# gets a new release. A version that's already released gets its files and notes
+# rebuilt from main and replaced, and files no longer built are removed; its tag
+# doesn't move. To run it by hand (for example after fixing SKILL.md without a new
+# version): Actions tab, Release, "Run workflow".
 name: Release
 
 on:
@@ -51,40 +53,24 @@ jobs:
         id: version
         run: echo "tag=v$(jq -r .version .claude-plugin/plugin.json)" >> "$GITHUB_OUTPUT"
 
-      - name: Skip a version that's already released
-        id: check
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.version.outputs.tag }}
-        run: |
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "$TAG is already released."
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Build ask-first-for-claude.zip
-        if: steps.check.outputs.skip != 'true'
         run: cd skills && zip -r -X ../ask-first-for-claude.zip ask-first
 
       # ChatGPT's plugin upload wants a manifest and skills/<name>/SKILL.md at the top.
       - name: Build ask-first-for-chatgpt.zip
-        if: steps.check.outputs.skip != 'true'
         run: zip -r -X ask-first-for-chatgpt.zip .claude-plugin/plugin.json skills
 
       - name: Copy the short version for other AIs
-        if: steps.check.outputs.skip != 'true'
         run: cp prompts/ask-first.txt ask-first-for-other-ais.txt
 
-      - name: Publish the release
-        if: steps.check.outputs.skip != 'true'
+      - name: Write the release notes
         env:
-          GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}
         run: |
           {
             echo "**claude.ai:** download \`ask-first-for-claude.zip\` below, then upload it and turn it on under **Customize > Skills**."
             echo
-            echo "**ChatGPT:** download \`ask-first-for-chatgpt.zip\` below and upload it under **Customize > Plugins**, then start it with \`@ask-first\`."
+            echo "**ChatGPT:** download \`ask-first-for-chatgpt.zip\` below and upload the zip as it is under **Customize > Plugins**, then start it with \`@ask-first\`. On a Mac, the zip holds a hidden \`.claude-plugin\` folder (the plugin's manifest) next to \`skills\`, so Finder shows only the skill; don't unzip it and zip it again. If Safari unzips it for you, download it again with right-click > **Download Linked File**, or with another browser."
             echo
             echo "**Gemini:** download \`SKILL.md\` below, upload it under **Customize > Skills**, then start it with \`@ask-first\`."
             echo
@@ -95,4 +81,24 @@ jobs:
             echo "## What's new"
             awk -v h="## ${TAG#v}" 'index($0, h " ") == 1 || $0 == h {f=1; next} f && /^## / {exit} f' CHANGELOG.md
           } > notes.md
-          gh release create "$TAG" ask-first-for-claude.zip ask-first-for-chatgpt.zip skills/ask-first/SKILL.md ask-first-for-other-ais.txt --target "$GITHUB_SHA" --title "Ask First ${TAG#v}" --notes-file notes.md
+
+      - name: Publish the release, or replace a released version's files
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          files=(ask-first-for-claude.zip ask-first-for-chatgpt.zip skills/ask-first/SKILL.md ask-first-for-other-ais.txt)
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" "${files[@]}" --target "$GITHUB_SHA" --title "Ask First ${TAG#v}" --notes-file notes.md
+            exit 0
+          fi
+          echo "$TAG is already released; replacing its files and notes with this build."
+          gh release upload "$TAG" "${files[@]}" --clobber
+          keep=" $(for f in "${files[@]}"; do printf '%s ' "$(basename "$f")"; done)"
+          gh release view "$TAG" --json assets --jq '.assets[].name' | while IFS= read -r name; do
+            case "$keep" in
+              *" $name "*) ;;
+              *) echo "Removing $name, which this build no longer makes."; gh release delete-asset "$TAG" "$name" --yes ;;
+            esac
+          done
+          gh release edit "$TAG" --notes-file notes.md
