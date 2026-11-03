@@ -66,7 +66,9 @@ The full skill and the short version ask the same way. The full skill has more g
 
 ### Claude Code
 
-Install it as a plugin, in one step:
+**Already using it in claude.ai?** If you sign in to Claude Code with your claude.ai account, skills you turn on in claude.ai load in Claude Code too, so you don't need the plugin. The sync goes one way only: a plugin installed in Claude Code doesn't appear in claude.ai. If you have both, Claude Code loads both copies, so keep only one turned on.
+
+Otherwise, install it as a plugin, in one step:
 
 ```
 /plugin install ask-first --marketplace RosBradley/ask-first
@@ -82,8 +84,6 @@ On Claude Code older than 2.1.275, use two steps instead:
 Then type `.ask`, `.askme` or `ask first` in any message, or run it directly with `/ask-first:ask-first`.
 
 To install without the plugin system, copy `skills/ask-first/` to `~/.claude/skills/ask-first/` (all your projects) or `.claude/skills/ask-first/` (one repository).
-
-If you sign in to Claude Code with your claude.ai account and the skill is turned on there too, Claude Code loads both. Keep one of them on, so you know which version answers.
 
 ### Building the files yourself
 

@@ -33,6 +33,8 @@ Sources: [Claude's interactive options](https://support.claude.com/en/articles/1
 2. Upload it and turn it on under **Customize > Skills**.
 3. In a new chat, type: `Plan a weekend trip to Chicago. .ask`
 
+If you sign in to Claude Code with the same account, the skill loads there too, so you don't need the Claude Code plugin. This only goes one way: a plugin installed in Claude Code doesn't appear in claude.ai.
+
 ### Claude Code
 
 See [Claude Code in the README](../README.md#claude-code). In Claude Code, the questions come as clickable choices instead of text.
